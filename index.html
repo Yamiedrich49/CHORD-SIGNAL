@@ -49,6 +49,75 @@
 @media (min-height:800px) and (max-height:899px){.fader{height:120px}.path{height:48px}.pathline{height:14px}.goalbox{height:70px}}
 @media (min-height:900px){.progressline{margin-top:18px}.leveltitle{margin-top:16px}.board{padding-top:16px;padding-bottom:13px}.goalbox{height:78px;margin-top:11px}.path{height:52px}.pathline{height:21px}.txnumber{font-size:28px;margin:6px 0 5px}.fader{height:137px}.zero{min-height:26px}.pianokey{height:40px;margin-top:10px}.soundcard{margin-top:12px}.wavebox,#wave{height:44px}}
 @media (max-height:740px){.topbar{height:37px}.goalbox{height:54px}.path{height:32px}.fader{height:88px}.leveltitle{margin-top:6px}}
+
+/* v3 — tactile instrument, single continuous 0–3 fader, quiet visual hierarchy */
+:root{--edge:#294954;--teal:#7defd6;--amber:#ffe2a5}
+html,body{touch-action:pan-y}
+#app{max-width:450px;padding-left:18px;padding-right:18px}
+.circle{width:42px;height:42px;border-radius:14px}
+.mark{width:39px;height:39px;border-radius:12px}
+.board{border:1px solid #325960;box-shadow:0 24px 50px #0005, inset 0 1px #ffffff0e}
+.cap .light{font-size:10px}
+.lanes{gap:5px}
+.lane{--note:#87e8d7;padding:0 3px}
+.lane:nth-child(2){--note:#8adce8}.lane:nth-child(3){--note:#c5e5a1}.lane:nth-child(4){--note:#b4cfff}
+.notename{font-weight:900;font-size:19px}.enote{letter-spacing:.025em;color:#819ea7}
+.goalnum{color:#ffe0a0;text-shadow:0 0 18px #ffc67223}
+.goalbar b{width:13px;border-radius:4px;border-color:#4b6b6b;background:#253b43}
+.goalbar b.on{background:linear-gradient(#ffecc3,#f0bf75);border-color:#ffe5af;box-shadow:0 0 11px #edbe8160}
+.rxnum{font-weight:800;transition:color .2s,background .2s}
+.path{position:relative}
+.pathline{left:50%;width:1px;background:linear-gradient(#87ddcf19,#7bc5c597,#87ddcf19)}
+.pathline.bottom{background:linear-gradient(#87ddcf19,#7bc5c597,#87ddcf19)}
+.path:before{content:'⌃';position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);color:#547e83;font-size:18px;line-height:1}
+.effect{border-radius:9px;min-width:39px;height:25px;font-weight:900;box-shadow:0 0 0 3px #122e37;letter-spacing:-.03em}
+.effect.leak{background:#254d42}.effect.loss{background:#423b31}
+.path.neutral .effect{display:none}
+.path.neutral:before{color:#466b71}
+.path .effect + .effect{margin-top:3px}
+.path .effect.dual{font-size:9px}
+.path:has(.dual){gap:2px}
+.lane.signal-on .pathline{background:linear-gradient(#9ef5d835,#9bf5df,#9ef5d835);box-shadow:0 0 7px #80d4c77a}
+.lane.signal-on .path:before{color:#a1e6da}
+.lane.transmitting .path:after{content:'';position:absolute;bottom:0;left:calc(50% - 3px);height:7px;width:7px;border-radius:50%;background:#e9ffda;box-shadow:0 0 15px #b3ffee;animation:signal-rise .72s ease-out both}
+@keyframes signal-rise{from{bottom:0;opacity:0;transform:scale(.8)}15%{opacity:1}to{bottom:100%;opacity:0;transform:scale(.7)}}
+.txnumber{font-size:30px;color:var(--note);text-shadow:0 0 15px #60e6d326}
+.fader{height:157px;padding:6px;gap:5px;border:1px solid #406671;background:linear-gradient(160deg,#132b37,#0b222c);border-radius:15px;display:grid;grid-template-rows:repeat(4,minmax(0,1fr));overflow:visible;box-shadow:inset 0 2px 11px #03131d88,0 5px 14px #0004;cursor:ns-resize}
+.fader:after{inset:0;border-radius:15px;box-shadow:inset 0 0 1px #d4ffef15}
+.detent{border-radius:8px;background:linear-gradient(180deg,#24434c,#1c3640);border:1px solid #395763;position:relative;display:grid;place-items:center;pointer-events:none;transition:background .09s,border .09s,box-shadow .09s}
+.detent:before{content:attr(data-value);height:auto;width:auto;font-size:11px;font-weight:850;line-height:1;color:#759aa1;opacity:.85}
+.detent.active{background:linear-gradient(115deg,var(--note),#6bdcc6);border:1px solid #ceffea;box-shadow:0 0 13px #6debd354,inset 0 1px #ffffff75}
+.detent.active:before{color:#12545a;opacity:.78}
+.detent.zero-step{background:linear-gradient(180deg,#102831,#0c222a);border:1px dashed #34555f}
+.detent.zero-step:before{content:'0';font-weight:850;color:#8faab2;font-size:12px;height:auto;background:none;opacity:1}
+.detent.zero-step.active{border:1px solid #8de0d0;box-shadow:inset 0 0 0 1px #a5f1e23f,0 0 12px #8de0d029}
+.detent.zero-step.active:before{color:#d2fff3}
+.fader:focus-visible{outline:2px solid var(--note);outline-offset:3px}
+.fader.active-touch{border-color:#b2ffe5;box-shadow:0 0 0 2px #9aefdc4b,0 9px 24px #5fe7cd25,inset 0 2px 10px #091c26}
+.lane.guide .fader{animation:guide-breathe 2.8s ease-in-out infinite}
+@keyframes guide-breathe{0%,100%{box-shadow:0 0 0 0 #8df5d500,inset 0 2px 10px #091c26}50%{box-shadow:0 0 0 3px #91ffe138,0 0 20px #76ebd92a,inset 0 2px 10px #091c26}}
+.spilltext{font-size:10px;color:#99bab8;line-height:1.35}
+.soundcard{background:linear-gradient(140deg,#112932,#0d1c27);border-color:#335861;border-radius:18px;padding:11px 13px 7px}
+.soundhead strong{font-size:10px;letter-spacing:.08em;color:#add5d1}
+.soundhead{gap:10px}
+.soundright{display:flex;gap:8px;align-items:center;min-width:0}
+.soundright span{font-size:10px;color:#8fafb6;white-space:nowrap}
+.preview{width:42px;height:36px;flex:0 0 42px;border:1px solid #548079;border-radius:12px;background:linear-gradient(#25534e,#1a3f43);color:#b7f8d9;display:grid;place-items:center;font-size:15px;box-shadow:inset 0 1px #ffffff13}
+.preview:active{transform:scale(.94);background:#336f66}.preview svg{width:16px;height:16px}
+.wavebox{height:49px}.wavebox #wave{height:49px}
+.soundcard.sending{border-color:#88e4c6;box-shadow:0 0 28px #5aefbe26}
+.soundcard.solved{border-color:#a4e7b3}
+.feedback{font-size:11.5px;color:#a5c8c7}
+.send{background:linear-gradient(108deg,#6de2d6,#b3f9cc);border-radius:17px;box-shadow:0 10px 25px #44dfc02c}
+.send.ready{box-shadow:0 0 0 2px #b9ffdd45,0 9px 28px #44dfc04a}
+.send:active{transform:translateY(2px) scale(.995)}
+.reset{border-radius:17px}
+.goalbox .rxnum.good{animation:rx-light .45s ease-out}
+@keyframes rx-light{0%{transform:scale(.75);opacity:.3}75%{transform:scale(1.06);opacity:1}100%{transform:scale(1)}}
+@media(max-height:900px){.progressline{margin-top:9px}.leveltitle{margin:10px 0 3px}.subtitle{margin-bottom:9px}.board{padding:12px 11px 10px}.goalbox{height:71px;margin-top:7px}.path{height:49px}.fader{height:146px}.txnumber{margin:4px 0 6px}.soundcard{padding:9px 12px 5px;margin-top:9px}.wavebox,.wavebox #wave{height:45px}.footbox{padding-top:9px}.feedback{margin-top:8px}}
+@media(max-height:790px){.progressline{margin-top:6px}.leveltitle{font-size:20px;margin:9px 0 2px}.subtitle{margin-bottom:6px}.board{padding:9px 10px 7px}.goalbox{height:64px;margin-top:4px}.goalbar{margin-top:1px}.path{height:42px}.effect{height:20px}.txnumber{font-size:25px;margin:2px 0 4px}.fader{height:122px;gap:4px;padding:5px}.soundcard{margin-top:7px;padding:7px 10px 4px}.wavebox,.wavebox #wave{height:34px}.footbox{padding-top:6px}.send,.reset{min-height:49px}.feedback{min-height:19px;margin-top:5px}.tinyfooter{display:none}}
+@media(max-height:710px){.topbar{height:35px}.progressline{margin-top:5px}.leveltitle{font-size:18px;margin:6px 0 2px}.subtitle{font-size:11px;margin-bottom:5px}.goalbox{height:54px}.goalnum{font-size:18px}.rxnum{margin-top:1px}.path{height:34px}.effect{height:18px;font-size:9px}.fader{height:104px;gap:3px}.soundcard{margin-top:5px}.wavebox,.wavebox #wave{height:28px}.send,.reset{min-height:46px}}
+@media(prefers-reduced-motion:reduce){.lane.guide .fader{animation:none}.lane.transmitting .path:after{animation:none}}
 </style></head><body>
 <div id="app">
 <header class="topbar">
@@ -58,17 +127,17 @@
 <div class="progressline"><span class="chapter" id="chapter">CHAPTER 01 · 和音をつくる</span><button class="level" id="jump" aria-label="ステージを選ぶ">01 <span>/ 24⌄</span></button></div><div class="progressbar"><div id="progressbar"></div></div>
 <h1 class="leveltitle" id="title">音を2つ、同時に送ろう</h1><p class="subtitle" id="hint">目標と同じ音の大きさで、和音をつくろう。</p>
 <section class="board" id="board" aria-label="4つの周波数チャンネル">
-<div class="cap"><span>RECEIVER <span style="color:#ffda9b">●</span> 目標</span><span class="light">4つの周波数 / 4つの数字</span></div>
+<div class="cap"><span><span style="color:#ffe0a0">●</span> とどけたい音の大きさ</span><span class="light">4つの音 / 0〜3</span></div>
 <div class="lanes" id="lanes"></div>
 <div class="spilltext" id="spilltext">4つの音は、それぞれ別の道を通ります</div>
 </section>
-<section class="soundcard" id="soundcard" aria-label="合成された和音の波形"><div class="soundhead"><strong>THE CHORD <span style="color:#71e0cd">◌</span> 4音を重ねた波</strong><span id="wavestatus">音を触ると波形が変わる</span></div><div class="wavebox"><canvas id="wave"></canvas></div></section>
-<div class="footbox"><div class="budget"><span id="mode">音のつよさを調節しよう</span><strong id="power">送信電力 0</strong></div><div class="mainbuttons"><button class="reset" id="reset" aria-label="音量をすべてゼロに戻す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7v5h5"/><path d="M5.2 12A8 8 0 1 1 7 18"/></svg></button><button class="send" id="send">和音を送る <span class="arrow">↗</span></button></div><div class="feedback" id="feedback" aria-live="polite">下のバーを触って、音を大きくしよう。</div><div class="tinyfooter">音なしでも遊べます · 4つの音で数字を送るパズル</div></div>
+<section class="soundcard" id="soundcard" aria-label="合成された和音の波形"><div class="soundhead"><strong>THE CHORD <span style="color:#71e0cd">◌</span> 4つの音が合わさる</strong><div class="soundright"><span id="wavestatus">和音の波形</span><button class="preview" id="preview" aria-label="今の和音を聴く" title="今の和音を聴く"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l12-7z"/></svg></button></div></div><div class="wavebox"><canvas id="wave" aria-hidden="true"></canvas></div></section>
+<div class="footbox"><div class="budget"><span id="mode">音のつよさを調節しよう</span><strong id="power">送信電力 0</strong></div><div class="mainbuttons"><button class="reset" id="reset" aria-label="音量をすべてゼロに戻す"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7v5h5"/><path d="M5.2 12A8 8 0 1 1 7 18"/></svg></button><button class="send" id="send">和音を送る <span class="arrow">↗</span></button></div><div class="feedback" id="feedback" aria-live="polite">下のバーを触って、音を大きくしよう。</div><div class="tinyfooter">4つの音で、数字を届けるパズル · 音なしでも遊べます</div></div>
 </div>
 <div id="celebrate" aria-hidden="true"><div class="celebratepop">とどいた！ ✦</div></div>
 <div class="overlay" id="helpOverlay"><div class="modal"><h2>和音は、4つの通信路。</h2><p>ド・ミ・ソ・高いド。音の高さがちがうと、それぞれ別々の数字を運べます。</p>
 <div class="instruction"><span class="bullet">1</span><span><b>上の金色</b>は、届けたい数字です。</span></div>
-<div class="instruction"><span class="bullet">2</span><span><b>下の水色</b>を指で上下に動かし、音量を0〜3にします。鍵盤を押すと、その音を聴けます。</span></div>
+<div class="instruction"><span class="bullet">2</span><span><b>4段階のバー</b>をタップ、または指で上下になぞって、音量を0〜3にします。いちばん下が0です。波形の再生ボタンで今の和音を聴けます。</span></div>
 <div class="instruction"><span class="bullet">3</span><span><b>「和音を送る」</b>で4音をまとめて送信。届いた数字がすべて目標と同じならクリア！</span></div>
 <p>ステージが進むと、途中で音が弱くなる道や、となりに音が漏れる道が現れます。</p><p class="explain">※ OFDMの「複数の周波数で同時に情報を送る」発想を音で表現したゲームです。実際のQAMの位相成分やOFDMの信号処理を厳密に再現したものではありません。</p>
 <button class="close" id="closeHelp">遊んでみる →</button></div></div>
@@ -113,37 +182,38 @@ function spec(){return specs[stage];}
 function vibrate(){try{if(navigator.vibrate)navigator.vibrate(7);}catch(e){}}
 function soundCtx(){if(!audioOn)return null;try{audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}catch(e){return null;}}
 function note(index,v,duration=.37,delay=0){if(v<1)return;const c=soundCtx();if(!c)return;let t=c.currentTime+.012+delay;let master=c.createGain();master.gain.value=.42;master.connect(c.destination);[1,2].forEach((overtone,n)=>{let osc=c.createOscillator(),g=c.createGain();osc.type=n?'sine':'triangle';osc.frequency.value=notes[index].hz*overtone;let amp=[0,.075,.12,.17][v]*(n?.12:1);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(amp,t+.024);g.gain.exponentialRampToValueAtTime(.0001,t+duration);osc.connect(g);g.connect(master);osc.start(t);osc.stop(t+duration+.03);});}
-function chord(vals){vals.forEach((v,i)=>note(i,v,.76,i*.05));}
+function chord(vals){vals.forEach((v,i)=>note(i,v,.72,0));}
 function reward(){let c=soundCtx();if(!c)return;[523.25,659.25,783.99,1046.5].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain(),t=c.currentTime+.015+i*.105;o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.075,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+.46);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+.48);});}
 function capChapter(){return stage<4?'CHAPTER 01 · 和音をつくる':stage<10?'CHAPTER 02 · 弱まる道':stage<16?'CHAPTER 03 · となりへの漏れ':'CHAPTER 04 · 信号の達人';}
 function render(){let s=spec();$('chapter').textContent=capChapter();$('jump').innerHTML=String(stage+1).padStart(2,'0')+' <span>/ '+N+'⌄</span>';$('progressbar').style.width=((stage+1)/N*100)+'%';$('title').textContent=s.title;$('hint').textContent=s.hint;
- let h='';for(let i=0;i<4;i++){let v=input[i],r=received?received[i]:null,match=received&&r===s.goal[i];let leaking=i<3&&s.leak[i];let loss=s.loss[i];h+=`<div class="lane" data-i="${i}"><div class="notename">${notes[i].jp}</div><div class="enote">${notes[i].en}</div><div class="goalbox"><div class="goalnum">${s.goal[i]}</div><div class="goalbar">${[1,2,3].map(j=>`<b class="${s.goal[i]>=j?'on':''}"></b>`).join('')}</div><div class="rxnum ${received?(match?'shown good':'shown bad'):''}">${received?'受信 '+r+(match?' ✓':' ×'):'受信 —'}</div></div><div class="path"><div class="pathline"></div><div class="effect ${loss?'loss':leaking?'leak':''}">${loss?'−'+loss:leaking?'→ ＋1':'そのまま'}</div><div class="pathline bottom"></div></div><div class="txnumber">${v}</div><div class="fader" role="slider" aria-label="${notes[i].jp}の送信音量" aria-valuemin="0" aria-valuemax="3" aria-valuenow="${v}" tabindex="0" data-i="${i}">${[3,2,1].map(n=>`<div class="step ${v>=n?'active':''}"></div>`).join('')}</div><button class="zero ${v===0?'selected':''}" data-zero="${i}" aria-label="${notes[i].jp}を0にする">0</button><button class="pianokey" data-note="${i}" aria-label="${notes[i].jp}を鳴らす">♪ ${notes[i].jp}</button></div>`;}
+ let h='';for(let i=0;i<4;i++){let v=input[i],r=received?received[i]:null,match=received&&r===s.goal[i];let leaking=i<3&&s.leak[i];let loss=s.loss[i];let noEffect=!loss&&!leaking;h+=`<div class="lane ${v?'signal-on':''}" data-i="${i}"><div class="notename">${notes[i].jp}</div><div class="enote">${notes[i].en}</div><div class="goalbox"><div class="goalnum">${s.goal[i]}</div><div class="goalbar">${[1,2,3].map(j=>`<b class="${s.goal[i]>=j?'on':''}"></b>`).join('')}</div><div class="rxnum ${received?(match?'shown good':'shown bad'):''}">${received?'受信 '+r+(match?' ✓':' ×'):'受信 —'}</div></div><div class="path ${noEffect?'neutral':''}"><div class="pathline"></div>${loss?'<div class="effect loss">−'+loss+'</div>':''}${leaking?'<div class="effect leak '+(loss?'dual':'')+'">↗＋1</div>':''}<div class="pathline bottom"></div></div><div class="txnumber">${v}</div><div class="fader" role="slider" aria-label="${notes[i].jp}の送信音量" aria-valuemin="0" aria-valuemax="3" aria-valuenow="${v}" aria-valuetext="音量${v}" tabindex="0" data-i="${i}">${[3,2,1,0].map(n=>`<div class="detent ${n===0?'zero-step ':''}${(n===0?v===0:v>=n)?'active':''}" data-value="${n}"></div>`).join('')}</div></div>`;}
  $('lanes').innerHTML=h;
- let links=s.leak.map((v,i)=>v?notes[i].jp+' → '+notes[i+1].jp:null).filter(Boolean);$('spilltext').textContent=links.length?'↗ 音量2以上で、となりへ＋1：'+links.join(' ／ '):'4つの音は、それぞれ別の道を通ります';
- $('mode').textContent=s.budget===null?(stage<4?'4つの音をいっしょに送ろう':'道の変化を見て調節しよう'):'限られた電力で届けよう';
- updateDisplay();
- $('feedback').className='feedback'+(solved?' correct':'');$('feedback').textContent=solved?'4つの数字がぴったり！ 次の問題へ。':'バーを触って音量を決めよう。';
+ let links=s.leak.map((v,i)=>v?notes[i].jp+' → '+notes[i+1].jp:null).filter(Boolean);$('spilltext').textContent=links.length?'↗ 送る音が2以上なら、となりへ＋1：'+links.join(' ／ '):stage<4?'指で上下になぞると、カチッと音量が変わるよ':'それぞれの通り道をよく見よう';
+ $('mode').textContent=s.budget===null?(stage<4?'音量をそろえて送ろう':'道の変化を考えて送ろう'):'使える送信電力は決まっている';
+ updateDisplay();$('feedback').className='feedback'+(solved?' correct':'');$('feedback').textContent=solved?'4つの音がぴったり！':'バーを上下になぞって音量を決めよう。';
  $('send').innerHTML=solved?(stage===N-1?'もう一度あそぶ <span class="arrow">↻</span>':'次のステージ <span class="arrow">→</span>'):'和音を送る <span class="arrow">↗</span>';
- drawWave();
+ $('soundcard').classList.remove('solved');updateGuide();drawWave();
 }
-function updateDisplay(){let s=spec();document.querySelectorAll('.lane').forEach((el,i)=>{el.querySelector('.txnumber').textContent=input[i];el.querySelector('.fader').setAttribute('aria-valuenow',input[i]);[...el.querySelectorAll('.step')].forEach((seg,j)=>seg.classList.toggle('active',input[i]>=3-j));el.querySelector('.zero').classList.toggle('selected',input[i]===0);let rx=el.querySelector('.rxnum');if(received){let m=received[i]===s.goal[i];rx.textContent='受信 '+received[i]+(m?' ✓':' ×');rx.className='rxnum shown '+(m?'good':'bad');}else{rx.textContent='受信 —';rx.className='rxnum';}});
+function updateGuide(){document.querySelectorAll('.lane').forEach(el=>el.classList.remove('guide'));$('send').classList.remove('ready');if(stage!==0||solved||busy)return;let focus=input[0]!==1?0:input[2]!==1?2:-1;if(focus<0){$('send').classList.add('ready');$('feedback').textContent='いいね！ 和音を送ってみよう。';}else{let el=document.querySelector('.lane[data-i="'+focus+'"]');if(el)el.classList.add('guide');$('feedback').textContent=focus===0?'まずはドを「1」にしよう。':'次はソを「1」にしよう。';}}
+function updateDisplay(){let s=spec();document.querySelectorAll('.lane').forEach((el,i)=>{el.querySelector('.txnumber').textContent=input[i];el.querySelector('.fader').setAttribute('aria-valuenow',input[i]);el.querySelector('.fader').setAttribute('aria-valuetext','音量'+input[i]);el.classList.toggle('signal-on',input[i]>0);el.querySelectorAll('.detent').forEach(seg=>{let n=+seg.dataset.value;seg.classList.toggle('active',n===0?input[i]===0:input[i]>=n)});let rx=el.querySelector('.rxnum');if(received){let m=received[i]===s.goal[i];rx.textContent='受信 '+received[i]+(m?' ✓':' ×');rx.className='rxnum shown '+(m?'good':'bad');}else{rx.textContent='受信 —';rx.className='rxnum';}});
  let power=input.reduce((a,b)=>a+b,0);let over=s.budget!==null&&power>s.budget;$('power').textContent=s.budget===null?'送信電力 '+power:'送信電力 '+power+' / '+s.budget;$('power').classList.toggle('over',over);
 }
 let down=null;
-function levelFromPointer(el,y){let rect=el.getBoundingClientRect();let pos=(y-rect.top)/rect.height;return pos<.33?3:pos<.66?2:1;}
-function setValue(i,v,play=false){if(solved||busy)return;v=Math.max(0,Math.min(3,v));if(input[i]===v)return;input[i]=v;received=null;updateDisplay();drawWave();if(play){note(i,v,.24);vibrate();}let lane=document.querySelectorAll('.lane')[i];lane.classList.remove('pulse');void lane.offsetWidth;lane.classList.add('pulse');$('feedback').textContent='音の大きさが、波形にも表れるよ。';$('feedback').className='feedback';}
-$('lanes').addEventListener('pointerdown',e=>{let el=e.target.closest('.fader');if(!el||busy||solved)return;let i=+el.dataset.i;down={i,id:e.pointerId,v:levelFromPointer(el,e.clientY)};el.setPointerCapture(e.pointerId);setValue(i,down.v,true);});
+function levelFromPointer(el,y){let rect=el.getBoundingClientRect();let pos=Math.max(0,Math.min(.999999,(y-rect.top)/rect.height));return 3-Math.floor(pos*4);}
+function clickDetent(i,v){const c=soundCtx();if(!c)return;let now=c.currentTime+.006;let o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(690+v*80+i*30,now);o.frequency.exponentialRampToValueAtTime(430+v*52+i*20,now+.035);g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(.013,now+.004);g.gain.exponentialRampToValueAtTime(.0001,now+.055);o.connect(g);g.connect(c.destination);o.start(now);o.stop(now+.06);}
+function setValue(i,v,play=false){if(solved||busy)return;v=Math.max(0,Math.min(3,v));if(input[i]===v)return;input[i]=v;received=null;updateDisplay();drawWave();if(play){clickDetent(i,v);if(v>0)note(i,v,.16);vibrate();}let lane=document.querySelectorAll('.lane')[i];lane.classList.remove('pulse');void lane.offsetWidth;lane.classList.add('pulse');$('feedback').textContent='音の大きさを調節しよう。';$('feedback').className='feedback';updateGuide();}
+$('lanes').addEventListener('pointerdown',e=>{let el=e.target.closest('.fader');if(!el||busy||solved)return;let i=+el.dataset.i;down={i,id:e.pointerId,v:levelFromPointer(el,e.clientY)};el.setPointerCapture(e.pointerId);el.classList.add('active-touch');setValue(i,down.v,true);});
 $('lanes').addEventListener('pointermove',e=>{if(!down||e.pointerId!==down.id)return;let el=document.querySelector('.fader[data-i="'+down.i+'"]');if(!el)return;let v=levelFromPointer(el,e.clientY);if(v!==down.v){down.v=v;setValue(down.i,v,true);}});
-for(const event of ['pointerup','pointercancel'])$('lanes').addEventListener(event,()=>{down=null;});
-$('lanes').addEventListener('click',e=>{let zero=e.target.closest('[data-zero]');let key=e.target.closest('[data-note]');if(zero){setValue(+zero.dataset.zero,0,true);}if(key){let i=+key.dataset.note;note(i,Math.max(1,input[i]),.48);vibrate();}});
-$('lanes').addEventListener('keydown',e=>{let el=e.target.closest('.fader');if(!el)return;let i=+el.dataset.i;if(e.key==='ArrowUp'||e.key==='ArrowRight'){e.preventDefault();setValue(i,input[i]+1,true);}if(e.key==='ArrowDown'||e.key==='ArrowLeft'){e.preventDefault();setValue(i,input[i]-1,true);}if(/^[0-3]$/.test(e.key)){setValue(i,+e.key,true);}});
-$('reset').addEventListener('click',()=>{if(busy||solved)return;input=[0,0,0,0];received=null;updateDisplay();drawWave();$('feedback').className='feedback';$('feedback').textContent='0に戻しました。もう一度つくろう。';vibrate();});
-function enter(n){stage=Math.max(0,Math.min(N-1,n));input=[0,0,0,0];received=null;solved=false;busy=false;down=null;render();}
+for(const event of ['pointerup','pointercancel','lostpointercapture'])$('lanes').addEventListener(event,e=>{if(down&&e.pointerId===down.id){let el=document.querySelector('.fader[data-i="'+down.i+'"]');el?.classList.remove('active-touch');down=null;}});
+$('lanes').addEventListener('keydown',e=>{let el=e.target.closest('.fader');if(!el)return;let i=+el.dataset.i;if(e.key==='ArrowUp'||e.key==='ArrowRight'){e.preventDefault();setValue(i,input[i]+1,true);}if(e.key==='ArrowDown'||e.key==='ArrowLeft'){e.preventDefault();setValue(i,input[i]-1,true);}if(/^[0-3]$/.test(e.key)){e.preventDefault();setValue(i,+e.key,true);}});
+$('preview').addEventListener('click',()=>{if(input.every(v=>v===0)){$('feedback').textContent='まずバーを上げて、音を作ってみよう。';return;}chord(input);animateWave();$('wavestatus').textContent='再生中♪';setTimeout(()=>{if(!busy)$('wavestatus').textContent='和音の波形'},850);});
+$('reset').addEventListener('click',()=>{if(busy||solved)return;input=[0,0,0,0];received=null;updateDisplay();drawWave();$('feedback').className='feedback';$('feedback').textContent='0に戻しました。もう一度つくろう。';updateGuide();vibrate();});
+function enter(n){stage=Math.max(0,Math.min(N-1,n));input=[0,0,0,0];received=null;solved=false;busy=false;down=null;document.querySelectorAll('.lane').forEach(x=>x.classList.remove('transmitting'));render();}
 function popSuccess(){let box=$('celebrate');box.querySelectorAll('.particle').forEach(x=>x.remove());for(let i=0;i<19;i++){let d=document.createElement('div'),a=2*Math.PI*i/19,rad=85+(i%4)*24;d.className='particle';d.style.setProperty('--dx',Math.round(Math.cos(a)*rad)+'px');d.style.setProperty('--dy',Math.round(Math.sin(a)*rad)+'px');d.style.background=['#a2f9da','#ffdaa0','#8bdceb'][i%3];box.appendChild(d);}box.classList.remove('show');void box.offsetWidth;box.classList.add('show');setTimeout(()=>box.classList.remove('show'),850);}
 $('send').addEventListener('click',()=>{if(busy)return;if(solved){enter(stage===N-1?0:stage+1);return;}
  const s=spec(),power=input.reduce((a,b)=>a+b,0);if(s.budget!==null&&power>s.budget){$('feedback').className='feedback wrong';$('feedback').innerHTML='電力オーバー！ あと <span class="em">'+(power-s.budget)+'</span> 小さくしよう。';vibrate();return;}
- busy=true;$('send').classList.add('sendflash');$('soundcard').classList.add('sending');$('wavestatus').textContent='送信中…';chord(input);animateWave();$('feedback').className='feedback';$('feedback').textContent='4つの音を、いっしょに送信中…';
- setTimeout(()=>{received=rec(input,s);busy=false;$('send').classList.remove('sendflash');$('soundcard').classList.remove('sending');$('wavestatus').textContent='4つの音を重ねた波形';updateDisplay();let n=received.filter((v,i)=>v!==s.goal[i]).length;if(n===0){solved=true;reward();popSuccess();$('send').innerHTML=stage===N-1?'もう一度あそぶ <span class="arrow">↻</span>':'次のステージ <span class="arrow">→</span>';$('feedback').className='feedback correct';$('feedback').textContent=stage===N-1?'24ステージ達成！ おめでとう！':'ぴったり届いた！ 次のステージへ。';try{localStorage.setItem(memkey,String(Math.max(+localStorage.getItem(memkey)||0,stage+1)));}catch(e){}}else{$('feedback').className='feedback wrong';$('feedback').innerHTML='<span class="em">あと '+n+' 音。</span> 上の「受信」と金色の目標を比べよう。';}},750);
+ busy=true;$('send').classList.add('sendflash');$('soundcard').classList.add('sending');document.querySelectorAll('.lane.signal-on').forEach((el,i)=>{el.classList.remove('transmitting');void el.offsetWidth;el.style.animationDelay=(i*.04)+'s';el.classList.add('transmitting');});$('wavestatus').textContent='送信中…';chord(input);animateWave();$('feedback').className='feedback';$('feedback').textContent='4つの音を、いっしょに送信中…';
+ setTimeout(()=>{received=rec(input,s);busy=false;$('send').classList.remove('sendflash');$('soundcard').classList.remove('sending');document.querySelectorAll('.lane').forEach(el=>el.classList.remove('transmitting'));$('wavestatus').textContent='和音の波形';updateDisplay();let n=received.filter((v,i)=>v!==s.goal[i]).length;if(n===0){solved=true;$('soundcard').classList.add('solved');reward();popSuccess();$('send').innerHTML=stage===N-1?'もう一度あそぶ <span class="arrow">↻</span>':'次のステージ <span class="arrow">→</span>';$('feedback').className='feedback correct';$('feedback').textContent=stage===N-1?'24ステージ達成！ おめでとう！':'ぴったり届いた！ 次のステージへ。';try{localStorage.setItem(memkey,String(Math.max(+localStorage.getItem(memkey)||0,stage+1)));}catch(e){}}else{$('feedback').className='feedback wrong';$('feedback').innerHTML='<span class="em">あと '+n+' 音。</span> 金色の目標と、受信した数字を比べよう。';}},750);
 });
 $('audio').addEventListener('click',()=>{audioOn=!audioOn;$('audio').style.opacity=audioOn?'1':'.4';$('audio').setAttribute('aria-label',audioOn?'音をオフにする':'音をオンにする');if(audioOn)note(0,1,.2);});
 function openModal(id){$(id).classList.add('open');}function closeModal(id){$(id).classList.remove('open');}
